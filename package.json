@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/ericoalmeida/poc-nodejs-clean-architecture/issues"
   },
-  "homepage": "https://github.com/ericoalmeida/poc-nodejs-clean-architecture#readme"
+  "homepage": "https://github.com/ericoalmeida/poc-nodejs-clean-architecture#readme",
+  "devDependencies": {
+    "git-commit-msg-linter": "^4.2.1"
+  }
 }
