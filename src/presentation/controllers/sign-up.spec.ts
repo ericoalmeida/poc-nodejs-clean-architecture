@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { MissingParamError } from '../errors/missing-param.error'
 
 import { SignUpController } from './sign-up.controller'
 
@@ -20,7 +21,7 @@ describe('SignUpController', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       const expectedStatusCode = 400
-      const expectedError = new Error('Missing param: name')
+      const expectedError = new MissingParamError('name')
 
       expect(httpResponse.statusCode).toBe(expectedStatusCode)
       expect(httpResponse.body).toEqual(expectedError)
@@ -42,7 +43,7 @@ describe('SignUpController', () => {
 
       const httpResponse = await sut.handle(httpRequest)
       const expectedStatusCode = 400
-      const expectedError = new Error('Missing param: email')
+      const expectedError = new MissingParamError('email')
 
       expect(httpResponse.statusCode).toBe(expectedStatusCode)
       expect(httpResponse.body).toEqual(expectedError)
