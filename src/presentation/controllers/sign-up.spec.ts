@@ -1,12 +1,17 @@
 import { faker } from '@faker-js/faker'
-import { MissingParamError } from '../errors/missing-param.error'
 
+import { MissingParamError } from '../errors/missing-param.error'
+import { ControllerProtocol } from '../protocols/controller.protocol'
 import { SignUpController } from './sign-up.controller'
 
 describe('SignUpController', () => {
   describe('#handle', () => {
+    const makeSut = (): ControllerProtocol => {
+      return new SignUpController()
+    }
+
     it('should return 400 if no name is provided', async () => {
-      const sut = new SignUpController()
+      const sut = makeSut()
 
       const fakeEmail = faker.internet.email
       const fakePassword = faker.internet.password
@@ -28,7 +33,7 @@ describe('SignUpController', () => {
     })
 
     it('should return 400 if no email is provided', async () => {
-      const sut = new SignUpController()
+      const sut = makeSut()
 
       const fakeName = faker.name.firstName
       const fakePassword = faker.internet.password
@@ -50,7 +55,7 @@ describe('SignUpController', () => {
     })
 
     it('should return 200 if all params is provided', async () => {
-      const sut = new SignUpController()
+      const sut = makeSut()
 
       const fakeName = faker.name.firstName
       const fakeEmail = faker.internet.email
@@ -72,7 +77,7 @@ describe('SignUpController', () => {
     })
 
     it('should return 400 if no password is provided', async () => {
-      const sut = new SignUpController()
+      const sut = makeSut()
 
       const fakeName = faker.name.firstName
       const fakeEmail = faker.internet.email
@@ -93,7 +98,7 @@ describe('SignUpController', () => {
     })
 
     it('should return 400 if no password is provided', async () => {
-      const sut = new SignUpController()
+      const sut = makeSut()
 
       const fakeName = faker.name.firstName
       const fakeEmail = faker.internet.email
