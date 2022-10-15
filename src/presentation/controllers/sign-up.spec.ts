@@ -3,8 +3,7 @@ import { InternalServerError } from '../errors/internal-server.error'
 import { InvalidParamError } from '../errors/invalid-param.error'
 
 import { MissingParamError } from '../errors/missing-param.error'
-import { ControllerProtocol } from '../protocols/controller.protocol'
-import { EmailValidator } from '../protocols/email-validator.protocol'
+import { ControllerProtocol, EmailValidator } from '../protocols'
 import { SignUpController } from './sign-up.controller'
 
 interface SutTypes {

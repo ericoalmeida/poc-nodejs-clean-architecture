@@ -2,10 +2,7 @@ import { InternalServerError } from '../errors/internal-server.error'
 import { InvalidParamError } from '../errors/invalid-param.error'
 import { MissingParamError } from '../errors/missing-param.error'
 import { badRequest, internalServerError } from '../helpers/http.helper'
-import { ControllerProtocol } from '../protocols/controller.protocol'
-import { EmailValidator } from '../protocols/email-validator.protocol'
-import { HttpRequestProtocol } from '../protocols/http-request.protocol'
-import { HttpResponseProtocol } from '../protocols/http-response.protocol'
+import { ControllerProtocol, EmailValidator, HttpRequestProtocol, HttpResponseProtocol } from '../protocols'
 
 export class SignUpController implements ControllerProtocol {
   constructor (private readonly emailValidator: EmailValidator) {}
