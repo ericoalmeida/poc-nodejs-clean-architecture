@@ -1,17 +1,36 @@
 import { faker } from '@faker-js/faker'
+import { InvalidParamError } from '../errors/invalid-param.error'
 
 import { MissingParamError } from '../errors/missing-param.error'
 import { ControllerProtocol } from '../protocols/controller.protocol'
+import { EmailValidator } from '../protocols/email-validator.protocol'
 import { SignUpController } from './sign-up.controller'
+
+interface SutTypes {
+  sut: ControllerProtocol
+  emailValidatorStub: EmailValidator
+}
+
+const makeSutTypes = (): SutTypes => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid (email: string): boolean {
+      return true
+    }
+  }
+
+  const emailValidatorStub = new EmailValidatorStub()
+  const sut = new SignUpController(emailValidatorStub)
+
+  return {
+    sut,
+    emailValidatorStub
+  }
+}
 
 describe('SignUpController', () => {
   describe('#handle', () => {
-    const makeSut = (): ControllerProtocol => {
-      return new SignUpController()
-    }
-
     it('should return 400 if no name is provided', async () => {
-      const sut = makeSut()
+      const { sut } = makeSutTypes()
 
       const fakeEmail = faker.internet.email
       const fakePassword = faker.internet.password
@@ -33,7 +52,7 @@ describe('SignUpController', () => {
     })
 
     it('should return 400 if no email is provided', async () => {
-      const sut = makeSut()
+      const { sut } = makeSutTypes()
 
       const fakeName = faker.name.firstName
       const fakePassword = faker.internet.password
@@ -55,7 +74,7 @@ describe('SignUpController', () => {
     })
 
     it('should return 200 if all params is provided', async () => {
-      const sut = makeSut()
+      const { sut } = makeSutTypes()
 
       const fakeName = faker.name.firstName
       const fakeEmail = faker.internet.email
@@ -77,7 +96,7 @@ describe('SignUpController', () => {
     })
 
     it('should return 400 if no password is provided', async () => {
-      const sut = makeSut()
+      const { sut } = makeSutTypes()
 
       const fakeName = faker.name.firstName
       const fakeEmail = faker.internet.email
@@ -98,7 +117,7 @@ describe('SignUpController', () => {
     })
 
     it('should return 400 if no password is provided', async () => {
-      const sut = makeSut()
+      const { sut } = makeSutTypes()
 
       const fakeName = faker.name.firstName
       const fakeEmail = faker.internet.email
@@ -115,6 +134,32 @@ describe('SignUpController', () => {
       const httpResponse = await sut.handle(httpRequest)
       const expectedStatusCode = 400
       const expectedError = new MissingParamError('passwordConfirmation')
+
+      expect(httpResponse.statusCode).toBe(expectedStatusCode)
+      expect(httpResponse.body).toEqual(expectedError)
+    })
+
+    it('should return 400 if an invalid email is provided', async () => {
+      const { sut, emailValidatorStub } = makeSutTypes()
+
+      jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+      const fakeName = faker.name.firstName
+      const fakeEmail = faker.internet.email
+      const fakePassword = faker.internet.password
+
+      const httpRequest = {
+        body: {
+          name: fakeName,
+          email: fakeEmail,
+          password: fakePassword,
+          passwordConfirmation: fakePassword
+        }
+      }
+
+      const httpResponse = await sut.handle(httpRequest)
+      const expectedStatusCode = 400
+      const expectedError = new InvalidParamError('email')
 
       expect(httpResponse.statusCode).toBe(expectedStatusCode)
       expect(httpResponse.body).toEqual(expectedError)
