@@ -164,5 +164,28 @@ describe('SignUpController', () => {
       expect(httpResponse.statusCode).toBe(expectedStatusCode)
       expect(httpResponse.body).toEqual(expectedError)
     })
+
+    it('should call EmailValidator with correct email', async () => {
+      const { sut, emailValidatorStub } = makeSutTypes()
+
+      const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
+
+      const fakeName = faker.name.firstName
+      const fakeEmail = faker.internet.email
+      const fakePassword = faker.internet.password
+
+      const httpRequest = {
+        body: {
+          name: fakeName,
+          email: fakeEmail,
+          password: fakePassword,
+          passwordConfirmation: fakePassword
+        }
+      }
+
+      await sut.handle(httpRequest)
+
+      expect(isValidSpy).toHaveBeenCalledWith(fakeEmail)
+    })
   })
 })
