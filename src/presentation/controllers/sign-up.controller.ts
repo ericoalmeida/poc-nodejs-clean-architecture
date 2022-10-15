@@ -13,5 +13,10 @@ export class SignUpController {
         body: new Error('Missing param: email')
       }
     }
+
+    return {
+      statusCode: 200,
+      body: { status: true }
+    }
   }
 }
