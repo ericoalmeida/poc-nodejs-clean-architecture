@@ -1,20 +1,15 @@
 import { MissingParamError } from '../errors/missing-param.error'
+import { basRequest } from '../helpers/http.helper'
 import { HttpRequestProtocol } from '../protocols/http-request.protocol'
 import { HttpResponseProtocol } from '../protocols/http-response.protocol'
 
 export class SignUpController {
   public async handle (httpRequest: HttpRequestProtocol): Promise<HttpResponseProtocol> {
-    if (!httpRequest.body.name) {
-      return {
-        statusCode: 400,
-        body: new MissingParamError('name')
-      }
-    }
+    const requiredFields = ['name', 'email']
 
-    if (!httpRequest.body.email) {
-      return {
-        statusCode: 400,
-        body: new MissingParamError('email')
+    for (const field of requiredFields) {
+      if (!httpRequest.body[field]) {
+        return basRequest(new MissingParamError(field))
       }
     }
 
