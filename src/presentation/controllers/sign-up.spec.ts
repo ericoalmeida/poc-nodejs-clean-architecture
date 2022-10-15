@@ -3,16 +3,16 @@ import { InternalServerError } from '../errors/internal-server.error'
 import { InvalidParamError } from '../errors/invalid-param.error'
 
 import { MissingParamError } from '../errors/missing-param.error'
-import { ControllerProtocol, EmailValidator } from '../protocols'
+import { ControllerProtocol, EmailValidatorProtocol } from '../protocols'
 import { SignUpController } from './sign-up.controller'
 
 interface SutTypes {
   sut: ControllerProtocol
-  emailValidatorStub: EmailValidator
+  emailValidatorStub: EmailValidatorProtocol
 }
 
 const makeSutTypes = (): SutTypes => {
-  class EmailValidatorStub implements EmailValidator {
+  class EmailValidatorStub implements EmailValidatorProtocol {
     isValid (email: string): boolean {
       return true
     }
@@ -189,7 +189,7 @@ describe('SignUpController', () => {
     })
 
     it('should return 500 if EmailValidator throws', async () => {
-      class EmailValidatorStub implements EmailValidator {
+      class EmailValidatorStub implements EmailValidatorProtocol {
         isValid (email: string): boolean {
           throw new Error('Internal serve error')
         }
