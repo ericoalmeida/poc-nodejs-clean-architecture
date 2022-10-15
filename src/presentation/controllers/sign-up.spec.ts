@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { InternalServerError } from '../errors/internal-server.error'
 import { InvalidParamError } from '../errors/invalid-param.error'
 
 import { MissingParamError } from '../errors/missing-param.error'
@@ -186,6 +187,37 @@ describe('SignUpController', () => {
       await sut.handle(httpRequest)
 
       expect(isValidSpy).toHaveBeenCalledWith(fakeEmail)
+    })
+
+    it('should return 500 if EmailValidator throws', async () => {
+      class EmailValidatorStub implements EmailValidator {
+        isValid (email: string): boolean {
+          throw new Error('Internal serve error')
+        }
+      }
+
+      const emailValidatorStub = new EmailValidatorStub()
+      const sut = new SignUpController(emailValidatorStub)
+
+      const fakeName = faker.name.firstName
+      const fakeEmail = faker.internet.email
+      const fakePassword = faker.internet.password
+
+      const httpRequest = {
+        body: {
+          name: fakeName,
+          email: fakeEmail,
+          password: fakePassword,
+          passwordConfirmation: fakePassword
+        }
+      }
+
+      const httpResponse = await sut.handle(httpRequest)
+      const expectedStatusCode = 500
+      const expectedError = new InternalServerError()
+
+      expect(httpResponse.statusCode).toBe(expectedStatusCode)
+      expect(httpResponse.body).toEqual(expectedError)
     })
   })
 })
