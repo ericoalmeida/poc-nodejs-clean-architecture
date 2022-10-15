@@ -1,7 +1,7 @@
 import { InternalServerError } from '../errors/internal-server.error'
 import { InvalidParamError } from '../errors/invalid-param.error'
 import { MissingParamError } from '../errors/missing-param.error'
-import { basRequest, internalServerError } from '../helpers/http.helper'
+import { badRequest, internalServerError } from '../helpers/http.helper'
 import { ControllerProtocol } from '../protocols/controller.protocol'
 import { EmailValidator } from '../protocols/email-validator.protocol'
 import { HttpRequestProtocol } from '../protocols/http-request.protocol'
@@ -16,14 +16,14 @@ export class SignUpController implements ControllerProtocol {
 
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {
-          return basRequest(new MissingParamError(field))
+          return badRequest(new MissingParamError(field))
         }
       }
 
       const emailIsValid = this.emailValidator.isValid(httpRequest.body.email)
 
       if (!emailIsValid) {
-        return basRequest(new InvalidParamError('email'))
+        return badRequest(new InvalidParamError('email'))
       }
 
       return {
