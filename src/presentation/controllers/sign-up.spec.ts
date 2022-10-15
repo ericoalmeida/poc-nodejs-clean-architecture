@@ -47,5 +47,27 @@ describe('SignUpController', () => {
       expect(httpResponse.statusCode).toBe(expectedStatusCode)
       expect(httpResponse.body).toEqual(expectedError)
     })
+
+    it('should return 200 if all params is provided', async () => {
+      const sut = new SignUpController()
+
+      const fakeName = faker.name.firstName
+      const fakeEmail = faker.internet.email
+      const fakePassword = faker.internet.password
+
+      const httpRequest = {
+        body: {
+          name: fakeName,
+          email: fakeEmail,
+          password: fakePassword,
+          passwordConfirmation: fakePassword
+        }
+      }
+
+      const httpResponse = await sut.handle(httpRequest)
+      const expectedStatusCode = 200
+
+      expect(httpResponse.statusCode).toBe(expectedStatusCode)
+    })
   })
 })
