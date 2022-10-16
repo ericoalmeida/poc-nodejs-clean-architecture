@@ -9,14 +9,28 @@ interface SutTypes {
   emailValidatorStub: EmailValidatorProtocol
 }
 
-const makeSutTypes = (): SutTypes => {
+const makeEmailValidator = (): EmailValidatorProtocol => {
   class EmailValidatorStub implements EmailValidatorProtocol {
     isValid (email: string): boolean {
       return true
     }
   }
 
-  const emailValidatorStub = new EmailValidatorStub()
+  return new EmailValidatorStub()
+}
+
+const makeEmailValidatorError = (): EmailValidatorProtocol => {
+  class EmailValidatorStub implements EmailValidatorProtocol {
+    isValid (email: string): boolean {
+      throw new Error('Internal serve error')
+    }
+  }
+
+  return new EmailValidatorStub()
+}
+
+const makeSutTypes = (): SutTypes => {
+  const emailValidatorStub = makeEmailValidator()
   const sut = new SignUpController(emailValidatorStub)
 
   return {
@@ -187,13 +201,7 @@ describe('SignUpController', () => {
     })
 
     it('should return 500 if EmailValidator throws', async () => {
-      class EmailValidatorStub implements EmailValidatorProtocol {
-        isValid (email: string): boolean {
-          throw new Error('Internal serve error')
-        }
-      }
-
-      const emailValidatorStub = new EmailValidatorStub()
+      const emailValidatorStub = makeEmailValidatorError()
       const sut = new SignUpController(emailValidatorStub)
 
       const fakeName = faker.name.firstName
