@@ -1,8 +1,6 @@
 import { faker } from '@faker-js/faker'
-import { InternalServerError } from '../errors/internal-server.error'
-import { InvalidParamError } from '../errors/invalid-param.error'
 
-import { MissingParamError } from '../errors/missing-param.error'
+import { InternalServerError, InvalidParamError, MissingParamError } from '../errors'
 import { ControllerProtocol, EmailValidatorProtocol } from '../protocols'
 import { SignUpController } from './sign-up.controller'
 
