@@ -19,16 +19,6 @@ const makeEmailValidator = (): EmailValidatorProtocol => {
   return new EmailValidatorStub()
 }
 
-const makeEmailValidatorError = (): EmailValidatorProtocol => {
-  class EmailValidatorStub implements EmailValidatorProtocol {
-    isValid (email: string): boolean {
-      throw new Error('Internal serve error')
-    }
-  }
-
-  return new EmailValidatorStub()
-}
-
 const makeSutTypes = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator()
   const sut = new SignUpController(emailValidatorStub)
@@ -201,8 +191,11 @@ describe('SignUpController', () => {
     })
 
     it('should return 500 if EmailValidator throws', async () => {
-      const emailValidatorStub = makeEmailValidatorError()
-      const sut = new SignUpController(emailValidatorStub)
+      const { sut, emailValidatorStub } = makeSutTypes()
+
+      jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+        throw new Error()
+      })
 
       const fakeName = faker.name.firstName
       const fakeEmail = faker.internet.email
