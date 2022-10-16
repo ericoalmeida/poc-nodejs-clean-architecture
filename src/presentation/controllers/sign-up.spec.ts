@@ -34,8 +34,8 @@ describe('SignUpController', () => {
     it('should return 400 if no name is provided', async () => {
       const { sut } = makeSutTypes()
 
-      const fakeEmail = faker.internet.email
-      const fakePassword = faker.internet.password
+      const fakeEmail = faker.internet.email()
+      const fakePassword = faker.internet.password()
 
       const httpRequest = {
         body: {
@@ -56,8 +56,8 @@ describe('SignUpController', () => {
     it('should return 400 if no email is provided', async () => {
       const { sut } = makeSutTypes()
 
-      const fakeName = faker.name.firstName
-      const fakePassword = faker.internet.password
+      const fakeName = faker.name.firstName()
+      const fakePassword = faker.internet.password()
 
       const httpRequest = {
         body: {
@@ -78,9 +78,9 @@ describe('SignUpController', () => {
     it('should return 200 if all params is provided', async () => {
       const { sut } = makeSutTypes()
 
-      const fakeName = faker.name.firstName
-      const fakeEmail = faker.internet.email
-      const fakePassword = faker.internet.password
+      const fakeName = faker.name.firstName()
+      const fakeEmail = faker.internet.email()
+      const fakePassword = faker.internet.password()
 
       const httpRequest = {
         body: {
@@ -100,8 +100,8 @@ describe('SignUpController', () => {
     it('should return 400 if no password is provided', async () => {
       const { sut } = makeSutTypes()
 
-      const fakeName = faker.name.firstName
-      const fakeEmail = faker.internet.email
+      const fakeName = faker.name.firstName()
+      const fakeEmail = faker.internet.email()
 
       const httpRequest = {
         body: {
@@ -121,9 +121,9 @@ describe('SignUpController', () => {
     it('should return 400 if no password is provided', async () => {
       const { sut } = makeSutTypes()
 
-      const fakeName = faker.name.firstName
-      const fakeEmail = faker.internet.email
-      const fakePassword = faker.internet.password
+      const fakeName = faker.name.firstName()
+      const fakeEmail = faker.internet.email()
+      const fakePassword = faker.internet.password()
 
       const httpRequest = {
         body: {
@@ -146,9 +146,9 @@ describe('SignUpController', () => {
 
       jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
 
-      const fakeName = faker.name.firstName
-      const fakeEmail = faker.internet.email
-      const fakePassword = faker.internet.password
+      const fakeName = faker.name.firstName()
+      const fakeEmail = faker.internet.email()
+      const fakePassword = faker.internet.password()
 
       const httpRequest = {
         body: {
@@ -172,9 +172,9 @@ describe('SignUpController', () => {
 
       const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
 
-      const fakeName = faker.name.firstName
-      const fakeEmail = faker.internet.email
-      const fakePassword = faker.internet.password
+      const fakeName = faker.name.firstName()
+      const fakeEmail = faker.internet.email()
+      const fakePassword = faker.internet.password()
 
       const httpRequest = {
         body: {
@@ -197,9 +197,9 @@ describe('SignUpController', () => {
         throw new Error()
       })
 
-      const fakeName = faker.name.firstName
-      const fakeEmail = faker.internet.email
-      const fakePassword = faker.internet.password
+      const fakeName = faker.name.firstName()
+      const fakeEmail = faker.internet.email()
+      const fakePassword = faker.internet.password()
 
       const httpRequest = {
         body: {
