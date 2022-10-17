@@ -1,7 +1,12 @@
-import { AddAccountUseCase } from 'src/domain/use-cases/add-account.usecase'
-import { InternalServerError, InvalidParamError, MissingParamError } from '../errors'
-import { badRequest, internalServerError } from '../helpers'
-import { ControllerProtocol, EmailValidatorProtocol, HttpRequestProtocol, HttpResponseProtocol } from '../protocols'
+import { InternalServerError, InvalidParamError, MissingParamError } from '../../errors'
+import { badRequest, internalServerError } from '../../helpers'
+import {
+  AddAccountUseCase,
+  ControllerProtocol,
+  EmailValidatorProtocol,
+  HttpRequestProtocol,
+  HttpResponseProtocol
+} from './sign-up.protocols'
 
 export class SignUpController implements ControllerProtocol {
   constructor (

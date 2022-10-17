@@ -2,8 +2,8 @@ import { faker } from '@faker-js/faker'
 import { AccountModel } from 'src/domain/models/account.model'
 
 import { AddAccountModel, AddAccountUseCase } from 'src/domain/use-cases/add-account.usecase'
-import { InternalServerError, InvalidParamError, MissingParamError } from '../errors'
-import { ControllerProtocol, EmailValidatorProtocol } from '../protocols'
+import { InternalServerError, InvalidParamError, MissingParamError } from '../../errors'
+import { ControllerProtocol, EmailValidatorProtocol } from '../../protocols'
 import { SignUpController } from './sign-up.controller'
 
 const makeEmailValidator = (): EmailValidatorProtocol => {
