@@ -306,7 +306,7 @@ describe('SignUpController', () => {
     it('should return 500 if addAccount throws', async () => {
       const { sut, addAccountStub } = makeSutTypes()
 
-      jest.spyOn(addAccountStub, 'add').mockImplementationOnce(() => {
+      jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
         throw new Error()
       })
 
