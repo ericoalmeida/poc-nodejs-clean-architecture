@@ -1,5 +1,5 @@
 import { InternalServerError, InvalidParamError, MissingParamError } from '../../errors'
-import { badRequest, internalServerError } from '../../helpers'
+import { badRequest, internalServerError, successRequest } from '../../helpers'
 import {
   AddAccountUseCase,
   ControllerProtocol,
@@ -35,16 +35,18 @@ export class SignUpController implements ControllerProtocol {
         return badRequest(new InvalidParamError('passwordConfirmation'))
       }
 
-      await this.addAccount.add({
+      const accountCreated = await this.addAccount.add({
         name,
         email,
         password
       })
 
-      return {
-        statusCode: 200,
-        body: { success: true }
+      return successRequest({
+        id: accountCreated.id,
+        name: accountCreated.name,
+        email: accountCreated.email
       }
+      )
     } catch (error) {
       return internalServerError(new InternalServerError())
     }
