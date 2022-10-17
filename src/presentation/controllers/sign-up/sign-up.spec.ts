@@ -100,11 +100,19 @@ describe('SignUpController', () => {
     })
 
     it('should return 200 if all params is provided', async () => {
-      const { sut } = makeSutTypes()
+      const { sut, addAccountStub } = makeSutTypes()
 
+      const fakeId = faker.datatype.uuid()
       const fakeName = faker.name.firstName()
       const fakeEmail = faker.internet.email()
       const fakePassword = faker.internet.password()
+
+      jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => ({
+        id: fakeId,
+        name: fakeName,
+        email: fakeEmail,
+        password: fakePassword
+      }))
 
       const httpRequest = {
         body: {
@@ -119,6 +127,11 @@ describe('SignUpController', () => {
       const expectedStatusCode = 200
 
       expect(httpResponse.statusCode).toBe(expectedStatusCode)
+      expect(httpResponse.body).toEqual({
+        id: fakeId,
+        name: fakeName,
+        email: fakeEmail
+      })
     })
 
     it('should return 400 if no password is provided', async () => {
