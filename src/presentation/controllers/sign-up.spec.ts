@@ -1,13 +1,10 @@
 import { faker } from '@faker-js/faker'
+import { AccountModel } from 'src/domain/models/account.model'
 
+import { AddAccountModel, AddAccountUseCase } from 'src/domain/use-cases/add-account.usecase'
 import { InternalServerError, InvalidParamError, MissingParamError } from '../errors'
 import { ControllerProtocol, EmailValidatorProtocol } from '../protocols'
 import { SignUpController } from './sign-up.controller'
-
-interface SutTypes {
-  sut: ControllerProtocol
-  emailValidatorStub: EmailValidatorProtocol
-}
 
 const makeEmailValidator = (): EmailValidatorProtocol => {
   class EmailValidatorStub implements EmailValidatorProtocol {
@@ -19,13 +16,40 @@ const makeEmailValidator = (): EmailValidatorProtocol => {
   return new EmailValidatorStub()
 }
 
+const makeAddAccount = (): AddAccountUseCase => {
+  class AddAccountStub implements AddAccountUseCase {
+    async add (account: AddAccountModel): Promise<AccountModel> {
+      const { name, email, password } = account
+
+      const fakeAccount = {
+        id: faker.datatype.uuid(),
+        name,
+        email,
+        password
+      }
+
+      return fakeAccount
+    }
+  }
+
+  return new AddAccountStub()
+}
+
+interface SutTypes {
+  sut: ControllerProtocol
+  emailValidatorStub: EmailValidatorProtocol
+  addAccountStub: AddAccountUseCase
+}
+
 const makeSutTypes = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator()
-  const sut = new SignUpController(emailValidatorStub)
+  const addAccountStub = makeAddAccount()
+  const sut = new SignUpController(emailValidatorStub, addAccountStub)
 
   return {
     sut,
-    emailValidatorStub
+    emailValidatorStub,
+    addAccountStub
   }
 }
 
@@ -241,6 +265,29 @@ describe('SignUpController', () => {
 
       expect(httpResponse.statusCode).toBe(expectedStatusCode)
       expect(httpResponse.body).toEqual(expectedError)
+    })
+
+    it('should call addAccount with correct values', async () => {
+      const { sut, addAccountStub } = makeSutTypes()
+
+      const addSpy = jest.spyOn(addAccountStub, 'add')
+
+      const fakeName = faker.name.firstName()
+      const fakeEmail = faker.internet.email()
+      const fakePassword = faker.internet.password()
+
+      const httpRequest = {
+        body: {
+          name: fakeName,
+          email: fakeEmail,
+          password: fakePassword,
+          passwordConfirmation: fakePassword
+        }
+      }
+
+      await sut.handle(httpRequest)
+
+      expect(addSpy).toHaveBeenCalledWith({ name: fakeName, email: fakeEmail, password: fakePassword })
     })
   })
 })
