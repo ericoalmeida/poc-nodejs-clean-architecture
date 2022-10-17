@@ -1,9 +1,13 @@
+import { AddAccountUseCase } from 'src/domain/use-cases/add-account.usecase'
 import { InternalServerError, InvalidParamError, MissingParamError } from '../errors'
 import { badRequest, internalServerError } from '../helpers'
 import { ControllerProtocol, EmailValidatorProtocol, HttpRequestProtocol, HttpResponseProtocol } from '../protocols'
 
 export class SignUpController implements ControllerProtocol {
-  constructor (private readonly emailValidator: EmailValidatorProtocol) {}
+  constructor (
+    private readonly emailValidator: EmailValidatorProtocol,
+    private readonly addAccount: AddAccountUseCase
+  ) {}
 
   public async handle (httpRequest: HttpRequestProtocol): Promise<HttpResponseProtocol> {
     try {
@@ -15,19 +19,26 @@ export class SignUpController implements ControllerProtocol {
         }
       }
 
-      const emailIsValid = this.emailValidator.isValid(httpRequest.body.email)
+      const { name, email, password, passwordConfirmation } = httpRequest.body
+      const emailIsValid = this.emailValidator.isValid(email)
 
       if (!emailIsValid) {
         return badRequest(new InvalidParamError('email'))
       }
 
-      if (httpRequest.body.password !== httpRequest.body.passwordConfirmation) {
+      if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'))
       }
 
+      await this.addAccount.add({
+        name,
+        email,
+        password
+      })
+
       return {
         statusCode: 200,
-        body: { status: true }
+        body: { success: true }
       }
     } catch (error) {
       return internalServerError(new InternalServerError())
