@@ -289,5 +289,33 @@ describe('SignUpController', () => {
 
       expect(addSpy).toHaveBeenCalledWith({ name: fakeName, email: fakeEmail, password: fakePassword })
     })
+
+    it('should return 500 if addAccount throws', async () => {
+      const { sut, addAccountStub } = makeSutTypes()
+
+      jest.spyOn(addAccountStub, 'add').mockImplementationOnce(() => {
+        throw new Error()
+      })
+
+      const fakeName = faker.name.firstName()
+      const fakeEmail = faker.internet.email()
+      const fakePassword = faker.internet.password()
+
+      const httpRequest = {
+        body: {
+          name: fakeName,
+          email: fakeEmail,
+          password: fakePassword,
+          passwordConfirmation: fakePassword
+        }
+      }
+
+      const httpResponse = await sut.handle(httpRequest)
+      const expectedStatusCode = 500
+      const expectedError = new InternalServerError()
+
+      expect(httpResponse.statusCode).toBe(expectedStatusCode)
+      expect(httpResponse.body).toEqual(expectedError)
+    })
   })
 })
