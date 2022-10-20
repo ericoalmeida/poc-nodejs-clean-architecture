@@ -3,19 +3,23 @@ import { EncrypterProtocol } from 'src/data/protocols/encrypter.protocol'
 import { AddAccountUseCase } from 'src/domain/use-cases/add-account.usecase'
 import { DbAddAccountUseCase } from './db-add-account.usecase'
 
-interface SutTypes {
-  encrypterStub: EncrypterProtocol
-  sut: AddAccountUseCase
-}
-
-const makeSut = (): SutTypes => {
+const makeEncrypterStub = (): EncrypterProtocol => {
   class EncrypterStub implements EncrypterProtocol {
     async encrypt (password: string): Promise<string> {
       return await new Promise(resolve => resolve(faker.internet.password()))
     }
   }
 
-  const encrypterStub = new EncrypterStub()
+  return new EncrypterStub()
+}
+
+interface SutTypes {
+  encrypterStub: EncrypterProtocol
+  sut: AddAccountUseCase
+}
+
+const makeSut = (): SutTypes => {
+  const encrypterStub = makeEncrypterStub()
   const sut = new DbAddAccountUseCase(encrypterStub)
 
   return {
