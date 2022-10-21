@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
-import { EncrypterProtocol } from 'src/data/protocols/encrypter.protocol'
-import { AddAccountUseCase } from 'src/domain/use-cases/add-account.usecase'
+
+import { AddAccountUseCase, EncrypterProtocol } from './db-add-account.protocols'
 import { DbAddAccountUseCase } from './db-add-account.usecase'
 
 const makeEncrypterStub = (): EncrypterProtocol => {
