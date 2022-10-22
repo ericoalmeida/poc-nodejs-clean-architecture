@@ -96,5 +96,19 @@ describe('DbAddAccount', () => {
 
       expect(addSpy).toHaveBeenCalledWith(accountData)
     })
+
+    it('Should throw if AddAccountRepository throws', async () => {
+      const { addAccountRepositoryStub, sut } = makeSut()
+
+      jest
+        .spyOn(addAccountRepositoryStub, 'add')
+        .mockReturnValueOnce(
+          new Promise((resolve, reject) => reject(new Error()))
+        )
+
+      const promise = sut.add(accountData)
+
+      await expect(promise).rejects.toThrow()
+    })
   })
 })
