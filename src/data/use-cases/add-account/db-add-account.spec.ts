@@ -110,5 +110,13 @@ describe('DbAddAccount', () => {
 
       await expect(promise).rejects.toThrow()
     })
+
+    it('Should return account on success', async () => {
+      const { sut } = makeSut()
+
+      const account = await sut.add(accountData)
+
+      expect(account).toEqual(FAKE_ACCOUNT)
+    })
   })
 })
