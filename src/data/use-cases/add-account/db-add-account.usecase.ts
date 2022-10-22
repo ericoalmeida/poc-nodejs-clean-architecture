@@ -11,8 +11,8 @@ export class DbAddAccountUseCase implements AddAccountUseCase {
 
     const encryptedPassword = await this.encrypter.encrypt(password)
 
-    await this.addAccountRepository.add({ name: account.name, email: account.email, password: encryptedPassword })
+    const accountCreated = await this.addAccountRepository.add({ name, email, password: encryptedPassword })
 
-    return await new Promise(resolve => resolve({ id: '', email, name, password: encryptedPassword }))
+    return accountCreated
   }
 }
