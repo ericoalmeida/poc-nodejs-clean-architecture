@@ -6,6 +6,6 @@ export class BcryptAdapter implements EncrypterProtocol {
   constructor (private readonly salt: number) {}
 
   async encrypt (password: string): Promise<string> {
-    return bcrypt.hashSync(password, this.salt)
+    return await bcrypt.hash(password, this.salt)
   }
 }
