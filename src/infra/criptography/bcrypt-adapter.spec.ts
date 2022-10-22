@@ -1,5 +1,7 @@
 import { faker } from '@faker-js/faker'
 import bcrypt from 'bcrypt'
+
+import { EncrypterProtocol } from 'src/data/protocols/encrypter.protocol'
 import { BcryptAdapter } from './bcrypt.adapter'
 
 const HASHED_PASSWORD_MOCK = faker.internet.password()
@@ -10,12 +12,15 @@ jest.mock('bcrypt', () => ({
   }
 }))
 
+const bcryptSalt = 12
+const makeSut = (): EncrypterProtocol => new BcryptAdapter(bcryptSalt)
+
 describe('BCryptAdapter', () => {
   describe('#encrypt', () => {
     it('Should calls bcrypt with correct password', async () => {
       const bcryptSalt = 12
 
-      const sut = new BcryptAdapter(bcryptSalt)
+      const sut = makeSut()
       const hashSpy = jest.spyOn(bcrypt, 'hashSync')
 
       const expectedCalledTimes = 1
@@ -28,9 +33,7 @@ describe('BCryptAdapter', () => {
     })
 
     it('Should returns hashed password on success', async () => {
-      const bcryptSalt = 12
-
-      const sut = new BcryptAdapter(bcryptSalt)
+      const sut = makeSut()
 
       const fakePassword = faker.internet.password()
 
