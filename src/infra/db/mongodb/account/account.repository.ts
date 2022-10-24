@@ -1,8 +1,10 @@
 import { Document } from 'mongodb'
+import { AddAccountRepositoryProtocol } from 'src/data/protocols/add-account-repository.protocol'
 import { AccountModel } from 'src/domain/models/account.model'
 import { AddAccountModel } from 'src/domain/use-cases/add-account.usecase'
 import { MongoHelper } from '../helpers/mongo.helper'
-import { AccountRepositoryProtocol } from './account.repository.protocol'
+
+type AccountRepositoryProtocol = AddAccountRepositoryProtocol
 
 export class AccountRepository implements AccountRepositoryProtocol {
   async add (account: AddAccountModel): Promise<AccountModel> {
