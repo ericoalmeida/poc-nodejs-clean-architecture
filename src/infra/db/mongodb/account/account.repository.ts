@@ -3,6 +3,7 @@ import { AddAccountRepositoryProtocol } from 'src/data/protocols/add-account-rep
 import { AccountModel } from 'src/domain/models/account.model'
 import { AddAccountModel } from 'src/domain/use-cases/add-account.usecase'
 import { MongoHelper } from '../helpers/mongo.helper'
+import { map } from './account.mapper'
 
 type AccountRepositoryProtocol = AddAccountRepositoryProtocol
 
@@ -15,11 +16,6 @@ export class AccountRepository implements AccountRepositoryProtocol {
       _id: result.insertedId
     }) as Document
 
-    return {
-      id: accountCreated?._id,
-      name: accountCreated.name,
-      email: accountCreated.email,
-      password: accountCreated.password
-    }
+    return map(accountCreated)
   }
 }
