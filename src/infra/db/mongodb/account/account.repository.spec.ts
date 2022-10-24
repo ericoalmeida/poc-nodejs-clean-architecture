@@ -3,6 +3,8 @@ import { AddAccountRepositoryProtocol } from 'src/data/protocols/add-account-rep
 import { MongoHelper } from '../helpers/mongo.helper'
 import { AccountRepository } from './account.repository'
 
+const COLLECTION_NAME = 'accounts'
+
 const makeSut = (): AddAccountRepositoryProtocol => {
   return new AccountRepository()
 }
@@ -14,6 +16,11 @@ describe('Account Repository', () => {
 
   afterAll(async () => {
     await MongoHelper.disconnect()
+  })
+
+  beforeEach(async () => {
+    const accountCollection = await MongoHelper.getCollection(COLLECTION_NAME)
+    await accountCollection.deleteMany({})
   })
 
   it('should insert a doc into collection', async () => {
