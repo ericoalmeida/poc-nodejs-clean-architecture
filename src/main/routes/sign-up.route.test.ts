@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import request from 'supertest'
 
-import { app } from '../config/app'
+import { app } from '../config/app.config'
 
 describe('SignUp Route', () => {
   it('Should return an account on success', async () => {

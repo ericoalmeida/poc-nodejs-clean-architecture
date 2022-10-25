@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { Request, Response } from 'express'
 import request from 'supertest'
 
-import { app } from '../config/app'
+import { app } from '../config/app.config'
 
 describe('Body Parser Middleware', () => {
   it('Should parse body as json', async () => {
