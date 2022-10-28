@@ -1,8 +1,8 @@
-import { DbAddAccountUseCase } from 'src/data/use-cases/add-account/db-add-account.usecase'
-import { BcryptAdapter } from 'src/infra/criptography/bcrypt.adapter'
-import { AccountRepository } from 'src/infra/db/mongodb/account/account.repository'
-import { SignUpController } from 'src/presentation/controllers/sign-up/sign-up.controller'
-import { EmailValidatorAdapter } from 'src/utils/email-validator-adapter'
+import { DbAddAccountUseCase } from '../../data/use-cases/add-account/db-add-account.usecase'
+import { BcryptAdapter } from '../../infra/criptography/bcrypt.adapter'
+import { AccountRepository } from '../../infra/db/mongodb/account/account.repository'
+import { SignUpController } from '../../presentation/controllers/sign-up/sign-up.controller'
+import { EmailValidatorAdapter } from '../../utils/email-validator-adapter'
 
 export const signUpFactory = (): SignUpController => {
   const saltEncrypter = 12
